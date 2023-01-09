@@ -31,8 +31,24 @@ class PlayerData():
     def __str__(self):
         return "ID: " + str(self.player_id) + " CARDS: " + ', '.join(self.card_list)
 
+def distribute_cards():
+    initial = ['c', 'd', 'h', 's']
+    card_list = [initial[i] + str(j+1) for i in range(4) for j in range(13)]
+    random.shuffle(card_list)
+    
+    #カードの総枚数が人数で割り切れない場合は一人だけ枚数が少なくなる(要修正?)
+    num = math.ceil(52/player)
+    cards = [card_list[i:i + num] for i in range(0, len(card_list), num)]
+    
+    return cards
+
 def main():
-    pass
+    cards = distribute_cards()
+    player_list = []
+    for i in range(player):
+        player_list += [PlayerData(i, cards[i])]
+    
+    print(player_list)
 
 if __name__ == "__main__":
     main()
