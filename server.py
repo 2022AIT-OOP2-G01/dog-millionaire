@@ -29,7 +29,7 @@ class PlayerData():
         self.player_id = id
     
     def __str__(self):
-        return "ID: " + str(self.player_id) + " CARDS: " + ', '.join(self.card_list)
+        return "ID: " + str(self.player_id) + " CARDS: " + ', '.join(self.card_list) + " NOC: " + str(len(self.card_list))
 
 def distribute_cards():
     initial = ['c', 'd', 'h', 's']
@@ -47,8 +47,7 @@ def main():
     player_list = []
     for i in range(player):
         player_list += [PlayerData(i, cards[i])]
-    
-    print(player_list)
+        print(player_list[i])
 
 if __name__ == "__main__":
     main()
