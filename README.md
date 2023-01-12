@@ -1,5 +1,6 @@
 # final
 最終課題
+- 進捗情報(Trello)：https://trello.com/b/bOc3UeUV/%E5%A4%A7%E5%AF%8C%E8%B1%AA
 ## 役割
 ### クライアント側
 石垣・西山
