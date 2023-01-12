@@ -32,7 +32,7 @@ jsonファイル
 
 ## クライアント側
 python
-- tkinter
+- PySide6
 
 ## サーバ側
 python
