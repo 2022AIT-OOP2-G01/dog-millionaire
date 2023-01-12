@@ -50,7 +50,15 @@ def distribute_cards():
         cards.append(card_list[start:end])
         start+=num_split[i]
         
+
     return cards
+
+def check_strength(top, put):
+    st = [12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    if st[int(top[1:])-1] < st[int(put[1:])-1]:
+        return True
+    else:
+        return False
 
 def main():
     cards = distribute_cards()
