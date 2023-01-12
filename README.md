@@ -31,6 +31,7 @@ python
 
 ## クライアント側
 python
+- tkinter
 
 ## サーバ側
 python
