@@ -77,22 +77,30 @@ def main():
     turn = 0
     while True:
         now = order[turn%player]
+
+        #誰もカードを出さなかったら初期値T14に変更
+        if top_card[1] == now:
+            top_card[0] = "T14"
+            
         print("ID: " + str(now) + "のターン")
         print("TOP: " + top_card[0])
         print("CARDS: " + ', '.join(player_list[now].getCardList()))
 
         while True:
-            put_card = int(input("何を出す(index)>"))
-            if put_card == -1:
+            put_card_index = int(input("何を出す(index)>"))
+            put_card = player_list[now].getCardList()[put_card_index]
+            if put_card_index == -1:
                 print("Pass!!")
                 break
-            elif check_strength(top_card[0] ,player_list[now].getCardList()[put_card]):
-                top_card[0] = player_list[now].getCardList()[put_card]
+            elif check_strength(top_card[0], put_card):
+                if int(put_card[1:]) == 8:
+                    turn-=1
+                
+                top_card[0] = put_card
                 top_card[1] = now
-                player_list[now].deleteCard(put_card)
+                player_list[now].deleteCard(put_card_index)
                 break
             print("出せないっす")
-
 
         print()
         turn+=1
