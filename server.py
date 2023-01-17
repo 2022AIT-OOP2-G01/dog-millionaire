@@ -1,10 +1,10 @@
 import threading
 import socket
 import random
-import math
 
 player = 4
 top_card = ["T14", 0]
+revolution = False
 
 class PlayerData():
     def __init__(self, id, card):
@@ -56,12 +56,15 @@ def distribute_cards():
 
 def check_strength(top, put):
     st = [12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0]
-    if st[int(top[1:])-1] < st[int(put[1:])-1]:
+    if st[int(top[1:])-1] < st[int(put[1:])-1] and not revolution:
+        return True
+    elif st[int(top[1:])-1] > st[int(put[1:])-1] and revolution:
         return True
     else:
         return False
 
 def main():
+    global revolution
     cards = distribute_cards()
     player_list = []
 
@@ -81,8 +84,10 @@ def main():
         #誰もカードを出さなかったら初期値T14に変更
         if top_card[1] == now:
             top_card[0] = "T14"
+            revolution = False
             
         print("ID: " + str(now) + "のターン")
+        print("Revolution: " + str(revolution))
         print("TOP: " + top_card[0])
         print("CARDS: " + ', '.join(player_list[now].getCardList()))
 
@@ -95,6 +100,9 @@ def main():
             elif check_strength(top_card[0], put_card):
                 if int(put_card[1:]) == 8:
                     turn-=1
+                
+                if int(put_card[1:]) == 11:
+                    revolution = True
                 
                 top_card[0] = put_card
                 top_card[1] = now
