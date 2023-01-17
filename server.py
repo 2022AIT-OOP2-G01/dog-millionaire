@@ -4,6 +4,7 @@ import random
 import math
 
 player = 4
+top_card = ["T14", 0]
 
 class PlayerData():
     def __init__(self, id, card):
@@ -47,14 +48,14 @@ def distribute_cards():
     cards = []
     for i in range(player):
         end += num_split[i]
-        cards.append(card_list[start:end])
+        c_buf = card_list[start:end]
+        cards.append(sorted(c_buf, key=lambda num: int(num[1:])))
         start+=num_split[i]
-        
 
     return cards
 
 def check_strength(top, put):
-    st = [12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    st = [12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0]
     if st[int(top[1:])-1] < st[int(put[1:])-1]:
         return True
     else:
@@ -66,7 +67,35 @@ def main():
 
     for i in range(player):
         player_list += [PlayerData(i, cards[i])]
-        print(player_list[i])
+        #print(player_list[i])
+    
+    order = [i for i in range(player)]
+    random.shuffle(order)
+
+    #サーバーとの接続処理
+
+    turn = 0
+    while True:
+        now = order[turn%player]
+        print("ID: " + str(now) + "のターン")
+        print("TOP: " + top_card[0])
+        print("CARDS: " + ', '.join(player_list[now].getCardList()))
+
+        while True:
+            put_card = int(input("何を出す(index)>"))
+            if put_card == -1:
+                print("Pass!!")
+                break
+            elif check_strength(top_card[0] ,player_list[now].getCardList()[put_card]):
+                top_card[0] = player_list[now].getCardList()[put_card]
+                top_card[1] = now
+                player_list[now].deleteCard(put_card)
+                break
+            print("出せないっす")
+
+
+        print()
+        turn+=1
 
 if __name__ == "__main__":
     main()
