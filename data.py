@@ -16,9 +16,9 @@ def get_server_data():
         #誰のターンか
         "turn": 1,
         #ゲームが終了しているか
-        "gameset":True,
+        "gameset": False,
         #誰が買ったか
-        "winer": 1,
+        "winer": [],
         #それぞれのプレイヤーの残り枚数
         "remaining_number_list":[],
         #自分の持っているカード
