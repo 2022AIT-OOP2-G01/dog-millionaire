@@ -102,22 +102,25 @@ def check_strength(top, put):
         return False
 
 def recv_client(sock, addr, id):
+    global send_content
     print('Client connected', addr)
 
     while send_content[id][0] == 0:
         pass
 
     sock.send(get_server_data(id).encode())
-    send_content[id][0] == 0
+    send_content[id][0] = 0
 
     while True:
         if send_content[id][0] == 1:
             sock.send(get_server_data(id).encode())
-            send_content[id][1] = sock.recv(BUFFER_SIZE).decode()
-            send_content[id][0] == 2
+            send_content[id][0] = 0
+            if order[turn%player] == id:
+                send_content[id][1] = sock.recv(BUFFER_SIZE).decode()
+                send_content[id][0] = 2
 
 def main():
-    global revolution, player, player_list, rank, turn
+    global revolution, player, player_list, rank, turn, send_content
     cards = distribute_cards()
 
     for i in range(player):
@@ -151,6 +154,25 @@ def main():
 
     #この先未テスト
 
+    while True:
+        now = order[turn%player]
+        #一斉送信
+        for i in range(4):
+            send_content[i][0] = 1
+    
+        while send_content[now][0] != 2:
+            pass
+        #一斉送信＆レシーブ終了
+
+        put_card_index = int(send_content[now][1])
+        put_card = player_list[now].getCardList()[put_card_index]
+
+        top_card[0] = put_card
+        top_card[1] = now
+        player_list[now].deleteCard(put_card_index)
+
+        turn+=1
+
     # while True:
     #     now = order[turn%player]
     #     if len(rank) == player-1:
@@ -168,6 +190,7 @@ def main():
 
     #     if not now in rank:
     #         while True:
+    #             send_content[id][0] = 1
     #             put_card_index = int(input("何を出す(index)>"))
     #             put_card = player_list[now].getCardList()[put_card_index]
     #             if put_card_index == -1:
