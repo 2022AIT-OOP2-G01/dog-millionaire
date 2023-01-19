@@ -130,8 +130,8 @@ def main():
                     #     print("CARDS: " + ', '.join(player_list[now].getCardList()))
                     #     throw_card_index = int(input("何を捨てる(index)>"))
                     #     player_list[now].deleteCard(throw_card_index)
-                    # break
                     # #10捨て↑↑↑↑↑↑↑↑↑↑
+                    break
                 print("出せないっす")
 
         print()
