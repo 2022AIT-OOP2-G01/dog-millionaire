@@ -2,9 +2,10 @@ import threading
 import socket
 import random
 import json
+import time
 
-PORT = 500000
-IP = "localhost"
+PORT = 50000
+IP = "10.1.52.127"
 BUFFER_SIZE = 1024
 #AF_INET=アドレスファミリーを示す関数　SOCK_STREAM=ソケットタイプを示す関数
 
@@ -64,7 +65,7 @@ def get_server_data(id):
         "my_card_list": player_list[id].getCardList()
     } 
 
-    return json.dump(server_data)
+    return json.dumps(server_data)
 
 def distribute_cards():
     initial = ['c', 'd', 'h', 's']
@@ -106,12 +107,12 @@ def recv_client(sock, addr, id):
     while send_content[id][0] == 0:
         pass
 
-    sock.send(get_server_data(id))
+    sock.send(get_server_data(id).encode())
     send_content[id][0] == 0
 
     while True:
         if send_content[id][0] == 1:
-            sock.send(get_server_data(id))
+            sock.send(get_server_data(id).encode())
             send_content[id][1] = sock.recv(BUFFER_SIZE).decode()
             send_content[id][0] == 2
 
@@ -147,6 +148,9 @@ def main():
     while send_content[0][0] or send_content[1][0] or send_content[2][0] or send_content[3][0]:
         pass
     print("GameStart")
+
+    #この先未テスト
+
     # while True:
     #     now = order[turn%player]
     #     if len(rank) == player-1:
