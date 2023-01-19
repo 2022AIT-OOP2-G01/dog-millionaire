@@ -1,9 +1,10 @@
 import threading
 import socket
 import random
-import math
 
 player = 4
+top_card = ["T14", 0]
+revolution = False
 
 class PlayerData():
     def __init__(self, id, card):
@@ -47,26 +48,82 @@ def distribute_cards():
     cards = []
     for i in range(player):
         end += num_split[i]
-        cards.append(card_list[start:end])
+        c_buf = card_list[start:end]
+        cards.append(sorted(c_buf, key=lambda num: int(num[1:])))
         start+=num_split[i]
-        
+
+    #テスト用
+    #cards = [["d3", "c1"], ["c6", "c5"], ["c3", "s0"], ["k5", "k8"]]
 
     return cards
 
 def check_strength(top, put):
-    st = [12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-    if st[int(top[1:])-1] < st[int(put[1:])-1]:
+    st = [12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0]
+    if st[int(top[1:])-1] < st[int(put[1:])-1] and not revolution:
+        return True
+    elif st[int(top[1:])-1] > st[int(put[1:])-1] and revolution:
         return True
     else:
         return False
 
 def main():
+    global revolution, player
     cards = distribute_cards()
     player_list = []
 
     for i in range(player):
         player_list += [PlayerData(i, cards[i])]
-        print(player_list[i])
+        #print(player_list[i])
+    
+    order = [i for i in range(player)]
+    random.shuffle(order)
+
+    #クライアントとの接続処理
+
+    rank = []
+    turn = 0
+    while True:
+        now = order[turn%player]
+        if len(rank) == player-1:
+            break
+
+        #誰もカードを出さなかったら初期値T14に変更
+        if top_card[1] == now:
+            top_card[0] = "T14"
+            revolution = False
+            
+        print("ID: " + str(now) + "のターン")
+        print("Revolution: " + str(revolution))
+        print("TOP: " + top_card[0])
+        print("CARDS: " + ', '.join(player_list[now].getCardList()))
+
+        if not now in rank:
+            while True:
+                put_card_index = int(input("何を出す(index)>"))
+                put_card = player_list[now].getCardList()[put_card_index]
+                if put_card_index == -1:
+                    print("Pass!!")
+                    break
+                elif check_strength(top_card[0], put_card):
+                    if player_list[now].getNumberOfCards() == 1:
+                        #終了処理
+                        rank.append(now)
+                    else:
+                        if int(put_card[1:]) == 8:
+                            turn-=1
+                        
+                        if int(put_card[1:]) == 11:
+                            revolution = True
+                    
+                    top_card[0] = put_card
+                    top_card[1] = now
+                    player_list[now].deleteCard(put_card_index)
+                    break
+                print("出せないっす")
+
+        print()
+        turn+=1
+    print("終了")
 
 if __name__ == "__main__":
     main()
