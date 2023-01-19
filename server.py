@@ -53,6 +53,8 @@ def get_server_data(id):
     server_data = {
         #プレイヤーID
         "player_id": id,
+        #革命状態
+        "revolution": revolution,
         #場に出ているカード
         "field_card": top_card[0],
         #誰のターンか
@@ -156,6 +158,9 @@ def main():
 
     while True:
         now = order[turn%player]
+        if len(rank) == player-1:
+            break
+
         #一斉送信
         for i in range(4):
             send_content[i][0] = 1
