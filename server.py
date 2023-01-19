@@ -115,10 +115,6 @@ def main():
                         #8切り
                         if int(put_card[1:]) == 8:
                             turn-=1
-                        #10捨て
-                        if int(put_card[1:]) == 10:
-                            throw_card_index = int(input("何を捨てる(index)>"))
-                            player_list[now].deleteCard(throw_card_index)
                         #11back
                         if int(put_card[1:]) == 11:
                             revolution = True
@@ -126,7 +122,16 @@ def main():
                     top_card[0] = put_card
                     top_card[1] = now
                     player_list[now].deleteCard(put_card_index)
-                    break
+                    # #10捨て↓↓↓↓↓↓↓↓↓↓
+                    # if int(put_card[1:]) == 10:
+                    #     if player_list[now].getNumberOfCards() == 1:
+                    #         #終了処理
+                    #         rank.append(now)
+                    #     print("CARDS: " + ', '.join(player_list[now].getCardList()))
+                    #     throw_card_index = int(input("何を捨てる(index)>"))
+                    #     player_list[now].deleteCard(throw_card_index)
+                    # break
+                    # #10捨て↑↑↑↑↑↑↑↑↑↑
                 print("出せないっす")
 
         print()
