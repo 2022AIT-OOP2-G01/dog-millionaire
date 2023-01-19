@@ -109,9 +109,17 @@ def main():
                         #終了処理
                         rank.append(now)
                     else:
+                        #5飛ばし
+                        if int(put_card[1:]) == 5:
+                            turn+=1
+                        #8切り
                         if int(put_card[1:]) == 8:
                             turn-=1
-                        
+                        #10捨て
+                        if int(put_card[1:]) == 10:
+                            throw_card_index = int(input("何を捨てる(index)>"))
+                            player_list[now].deleteCard(throw_card_index)
+                        #11back
                         if int(put_card[1:]) == 11:
                             revolution = True
                     
