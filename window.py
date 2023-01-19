@@ -8,7 +8,7 @@ class main(QWidget):
         super().__init__()
         
         self.setWindowTitle('大富豪') # ウィンドウのタイトル
-        self.setGeometry(200,200,800,700) # ウィンドウの位置と大きさ
+        self.setGeometry(200,200,850,700) # ウィンドウの位置と大きさ
         self.setStyleSheet("QWidget{ background-color: green }")
 
         # ラベルのstyle設定
@@ -21,7 +21,7 @@ class main(QWidget):
         # 文字を表示するところの背景色
         labelTbg = QLabel(self)
         labelTbg.setStyleSheet(labelStyle)
-        labelTbg.setGeometry(200,200,800,50)
+        labelTbg.setGeometry(200,200,900,60)
         labelTbg.move(0,0)
 
         # タイトル
@@ -46,10 +46,10 @@ class main(QWidget):
         # card3P = json_load['Player3']['mai']
         # card4P = json_load['Player4']['mai']
 
-        card1P = "1"
-        card2P = "1"
-        card3P = "1"
-        card4P = "1"
+        card1P = "13"
+        card2P = "13"
+        card3P = "13"
+        card4P = "13"
 
         # 1P
         labelP1 = QLabel("Player1", self)
@@ -59,7 +59,7 @@ class main(QWidget):
         # card1P = str(13)  # ここにJSONから残り枚数情報を持ってくる
         labelcard1P = QLabel("残り"+ card1P + "枚", self)
         labelcard1P.setStyleSheet(labelStyleP)
-        labelcard1P.move(400,20)
+        labelcard1P.move(400,30)
 
         # 2P
         labelP2 = QLabel("Player2", self)
@@ -69,7 +69,7 @@ class main(QWidget):
         # card2P = str(13)
         labelcard2P = QLabel("残り"+ card2P + "枚", self)
         labelcard2P.setStyleSheet(labelStyleP)
-        labelcard2P.move(500,20)
+        labelcard2P.move(500,30)
 
         # 3P
         labelP3 = QLabel("Player3", self)
@@ -79,7 +79,7 @@ class main(QWidget):
         # card3P = str(13)
         labelcard3P = QLabel("残り"+ card3P + "枚", self)
         labelcard3P.setStyleSheet(labelStyleP)
-        labelcard3P.move(600,20)
+        labelcard3P.move(600,30)
 
         # 4P
         labelP4 = QLabel("Player4", self)
@@ -89,7 +89,7 @@ class main(QWidget):
         # card4P = str(13)
         labelcard4P = QLabel("残り"+ card4P + "枚", self)
         labelcard4P.setStyleSheet(labelStyleP)
-        labelcard4P.move(700,20)
+        labelcard4P.move(700,30)
         
 
 
@@ -97,7 +97,7 @@ class main(QWidget):
         # 2P
         for x in range(int(card2P)):
             label = QLabel(self) # 画像を置くQLabel
-            label.move(-50 ,100 + x*30)
+            label.move(0 ,100 + x*30)
             pix = QPixmap('card_img/card_back_left.png') # 画像を読み込むQPixmap
             pix = pix.scaledToWidth(150) # 大きさの変更
             label.setPixmap(pix)
@@ -105,7 +105,7 @@ class main(QWidget):
         # 3P
         for x in range(int(card3P)):
             label = QLabel(self) # 画像を置くQLabel
-            label.move(200 + x*30 ,50 )
+            label.move(200 + x*30 ,60 )
             pix = QPixmap('card_img/card_back.png') # 画像を読み込むQPixmap
             pix = pix.scaledToWidth(100) # 大きさの変更
             label.setPixmap(pix)
@@ -119,11 +119,11 @@ class main(QWidget):
             label.setPixmap(pix)
 
 
-        label = QLabel(self) # 画像を置くQLabel
-        label.move(10,10)
-        pix = QPixmap('card_back.png') # 画像を読み込むQPixmap
-        pix = pix.scaledToWidth(100) # 大きさの変更
-        label.setPixmap(pix)
+        # label = QLabel(self) # 画像を置くQLabel
+        # label.move(10,10)
+        # pix = QPixmap('card_back.png') # 画像を読み込むQPixmap
+        # pix = pix.scaledToWidth(100) # 大きさの変更
+        # label.setPixmap(pix)
         
 
 qAp = QApplication(sys.argv)
