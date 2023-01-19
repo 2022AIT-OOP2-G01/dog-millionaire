@@ -3,13 +3,24 @@ import socket
 import random
 import json
 
-PORT = 50005
+PORT = 500000
+IP = "localhost"
 BUFFER_SIZE = 1024
 #AF_INET=アドレスファミリーを示す関数　SOCK_STREAM=ソケットタイプを示す関数
 
 player = 4
 top_card = ["T14", 0]
 revolution = False
+
+#[0] 0:処理なし, 1:データ送信, 2:データ受信
+#[1] 出したカード
+send_content = [[0, 0], [0, 0], [0, 0], [0, 0]]
+
+player_list = []
+rank = []
+turn = 0
+order = [i for i in range(player)]
+random.shuffle(order)
 
 class PlayerData():
     def __init__(self, id, card):
@@ -37,22 +48,20 @@ class PlayerData():
     def __str__(self):
         return "ID: " + str(self.player_id) + " CARDS: " + ', '.join(self.card_list) + " NOC: " + str(len(self.card_list))
 
-def get_server_data():
+def get_server_data(id):
     server_data = {
         #プレイヤーID
-        "player_id": 7,
+        "player_id": id,
         #場に出ているカード
-        "field_card": 3,
+        "field_card": top_card[0],
         #誰のターンか
-        "turn": 1,
-        #ゲームが終了しているか
-        "gameset": False,
+        "turn": order[turn%player],
         #誰が買ったか
-        "winer": [],
+        "winer": rank,
         #それぞれのプレイヤーの残り枚数
-        "remaining_number_list":[],
+        "remaining_number_list":[player_list[0].getNumberOfCards(), player_list[1].getNumberOfCards(), player_list[2].getNumberOfCards(), player_list[3].getNumberOfCards()],
         #自分の持っているカード
-        "my_card_list":[]
+        "my_card_list": player_list[id].getCardList()
     } 
 
     return json.dump(server_data)
@@ -93,26 +102,26 @@ def check_strength(top, put):
 
 def recv_client(sock, addr, id):
     print('Client connected', addr)
+
+    while send_content[id][0] == 0:
+        pass
+
+    sock.send(get_server_data(id))
+    send_content[id][0] == 0
+
     while True:
-        #コネクションの相手側からsendを使用して送られた
-        # オブジェクトを返す何か受け取るまでブロック
-        data = sock.recv(BUFFER_SIZE).decode()
-        print(data)
-        if data == 'q':
-            break
-        sock.send(data.upper( ).encode())
+        if send_content[id][0] == 1:
+            sock.send(get_server_data(id))
+            send_content[id][1] = sock.recv(BUFFER_SIZE).decode()
+            send_content[id][0] == 2
 
 def main():
-    global revolution, player
+    global revolution, player, player_list, rank, turn
     cards = distribute_cards()
-    player_list = []
 
     for i in range(player):
         player_list += [PlayerData(i, cards[i])]
         #print(player_list[i])
-    
-    order = [i for i in range(player)]
-    random.shuffle(order)
 
     #クライアントとの接続処理
     #４人繋がるまでここで待つ
@@ -121,7 +130,7 @@ def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         
         #ソケット登録   
-        s.bind(('10.1.53.93', PORT))
+        s.bind((IP, PORT))
         #ソケット接続待機
         s.listen()
 
@@ -131,52 +140,55 @@ def main():
             thread = threading.Thread(target=recv_client, args=(connection, client, i))
             # スレッド処理開始
             thread.start()
+    
+    for i in range(4):
+        send_content[i][0] = 1
 
+    while send_content[0][0] or send_content[1][0] or send_content[2][0] or send_content[3][0]:
+        pass
+    print("GameStart")
+    # while True:
+    #     now = order[turn%player]
+    #     if len(rank) == player-1:
+    #         break
 
-    rank = []
-    turn = 0
-    while True:
-        now = order[turn%player]
-        if len(rank) == player-1:
-            break
-
-        #誰もカードを出さなかったら初期値T14に変更
-        if top_card[1] == now:
-            top_card[0] = "T14"
-            revolution = False
+    #     #誰もカードを出さなかったら初期値T14に変更
+    #     if top_card[1] == now:
+    #         top_card[0] = "T14"
+    #         revolution = False
             
-        print("ID: " + str(now) + "のターン")
-        print("Revolution: " + str(revolution))
-        print("TOP: " + top_card[0])
-        print("CARDS: " + ', '.join(player_list[now].getCardList()))
+    #     print("ID: " + str(now) + "のターン")
+    #     print("Revolution: " + str(revolution))
+    #     print("TOP: " + top_card[0])
+    #     print("CARDS: " + ', '.join(player_list[now].getCardList()))
 
-        if not now in rank:
-            while True:
-                put_card_index = int(input("何を出す(index)>"))
-                put_card = player_list[now].getCardList()[put_card_index]
-                if put_card_index == -1:
-                    print("Pass!!")
-                    break
-                elif check_strength(top_card[0], put_card):
-                    if player_list[now].getNumberOfCards() == 1:
-                        #終了処理
-                        rank.append(now)
-                    else:
-                        if int(put_card[1:]) == 8:
-                            turn-=1
+    #     if not now in rank:
+    #         while True:
+    #             put_card_index = int(input("何を出す(index)>"))
+    #             put_card = player_list[now].getCardList()[put_card_index]
+    #             if put_card_index == -1:
+    #                 print("Pass!!")
+    #                 break
+    #             elif check_strength(top_card[0], put_card):
+    #                 if player_list[now].getNumberOfCards() == 1:
+    #                     #終了処理
+    #                     rank.append(now)
+    #                 else:
+    #                     if int(put_card[1:]) == 8:
+    #                         turn-=1
                         
-                        if int(put_card[1:]) == 11:
-                            revolution = True
+    #                     if int(put_card[1:]) == 11:
+    #                         revolution = True
                     
-                    top_card[0] = put_card
-                    top_card[1] = now
-                    player_list[now].deleteCard(put_card_index)
-                    break
-                print("出せないっす")
+    #                 top_card[0] = put_card
+    #                 top_card[1] = now
+    #                 player_list[now].deleteCard(put_card_index)
+    #                 break
+    #             print("出せないっす")
 
-        print()
-        turn+=1
-    print("終了")
+    #     print()
+    #     turn+=1
+    # print("終了")
 
 if __name__ == "__main__":
     main()
