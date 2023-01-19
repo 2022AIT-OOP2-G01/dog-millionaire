@@ -52,6 +52,9 @@ def distribute_cards():
         cards.append(sorted(c_buf, key=lambda num: int(num[1:])))
         start+=num_split[i]
 
+    #テスト用
+    #cards = [["d3", "c1"], ["c6", "c5"], ["c3", "s0"], ["k5", "k8"]]
+
     return cards
 
 def check_strength(top, put):
@@ -64,7 +67,7 @@ def check_strength(top, put):
         return False
 
 def main():
-    global revolution
+    global revolution, player
     cards = distribute_cards()
     player_list = []
 
@@ -75,11 +78,14 @@ def main():
     order = [i for i in range(player)]
     random.shuffle(order)
 
-    #サーバーとの接続処理
+    #クライアントとの接続処理
 
+    rank = []
     turn = 0
     while True:
         now = order[turn%player]
+        if len(rank) == player-1:
+            break
 
         #誰もカードを出さなかったら初期値T14に変更
         if top_card[1] == now:
@@ -91,27 +97,33 @@ def main():
         print("TOP: " + top_card[0])
         print("CARDS: " + ', '.join(player_list[now].getCardList()))
 
-        while True:
-            put_card_index = int(input("何を出す(index)>"))
-            put_card = player_list[now].getCardList()[put_card_index]
-            if put_card_index == -1:
-                print("Pass!!")
-                break
-            elif check_strength(top_card[0], put_card):
-                if int(put_card[1:]) == 8:
-                    turn-=1
-                
-                if int(put_card[1:]) == 11:
-                    revolution = True
-                
-                top_card[0] = put_card
-                top_card[1] = now
-                player_list[now].deleteCard(put_card_index)
-                break
-            print("出せないっす")
+        if not now in rank:
+            while True:
+                put_card_index = int(input("何を出す(index)>"))
+                put_card = player_list[now].getCardList()[put_card_index]
+                if put_card_index == -1:
+                    print("Pass!!")
+                    break
+                elif check_strength(top_card[0], put_card):
+                    if player_list[now].getNumberOfCards() == 1:
+                        #終了処理
+                        rank.append(now)
+                    else:
+                        if int(put_card[1:]) == 8:
+                            turn-=1
+                        
+                        if int(put_card[1:]) == 11:
+                            revolution = True
+                    
+                    top_card[0] = put_card
+                    top_card[1] = now
+                    player_list[now].deleteCard(put_card_index)
+                    break
+                print("出せないっす")
 
         print()
         turn+=1
+    print("終了")
 
 if __name__ == "__main__":
     main()
