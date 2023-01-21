@@ -347,14 +347,15 @@ class main(QWidget):
             
             # カードの表示
             label = QLabel(self) # 画像を置くQLabel
-            label.move(210 + x*50, 550)
+            label.move(170 + x*35, 550)
             label.setPixmap(pix)
 
         # ボタンの表示
         btn = [0]*len(card)
         for x in range(int(len(card))):
             btn[x]= QPushButton('',self)
-            btn[x].setGeometry(215 + x*50, 550, 50, 100)
+            btn[x].setStyleSheet("QPushButton {background-color: transparent}")
+            btn[x].setGeometry(170 + x*35, 555, 50, 125)
             
         # 押されたカードを出力
         btn[0].clicked.connect(lambda: print(card[0])) 
