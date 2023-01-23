@@ -2,10 +2,9 @@ import threading
 import socket
 import random
 import json
-import time
 
 PORT = 50000
-IP = "10.1.52.127"
+IP = "localhost"
 BUFFER_SIZE = 1024
 #AF_INET=アドレスファミリーを示す関数　SOCK_STREAM=ソケットタイプを示す関数
 
@@ -105,7 +104,7 @@ def check_strength(top, put):
 
 def recv_client(sock, addr, id):
     global send_content
-    print('Client connected', addr)
+    print('Player{} connected. {}'.format(id, addr))
 
     while send_content[id][0] == 0:
         pass
@@ -161,21 +160,43 @@ def main():
         if len(rank) == player-1:
             break
 
-        #一斉送信
-        for i in range(4):
-            send_content[i][0] = 1
-    
-        while send_content[now][0] != 2:
-            pass
-        #一斉送信＆レシーブ終了
+        if top_card[1] == now:
+            top_card[0] = "T14"
+            revolution = False
 
-        put_card_index = int(send_content[now][1])
-        put_card = player_list[now].getCardList()[put_card_index]
+        if not now in rank:
+            # 一斉送信
+            for i in range(4):
+                send_content[i][0] = 1
+        
+            while send_content[now][0] != 2:
+                pass
+            #一斉送信＆レシーブ終了
 
-        top_card[0] = put_card
-        top_card[1] = now
-        player_list[now].deleteCard(put_card_index)
+            put_card_index = int(send_content[now][1])
 
+            if put_card_index == -1:
+                print("Player{} Pass!!".format(now))
+            else:
+                put_card = player_list[now].getCardList()[put_card_index]
+
+                if player_list[now].getNumberOfCards() == 1:
+                    #終了処理
+                    rank.append(now)
+                    top_card[1] = order[(turn-1)%player]
+                    print("Turn{}: Player{} Finish!!!".format(turn, now))
+                else:
+                    if int(put_card[1:]) == 8:
+                        turn-=1
+                    
+                    if int(put_card[1:]) == 11:
+                        revolution = True
+                    
+                    top_card[1] = now
+                    print("Turn{}: Player{} put {}".format(turn, now, put_card))
+                
+                top_card[0] = put_card
+                player_list[now].deleteCard(put_card_index)
         turn+=1
 
     # while True:
