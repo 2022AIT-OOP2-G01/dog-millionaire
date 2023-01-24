@@ -10,19 +10,19 @@ def get_client_data():
 def get_server_data():
     server_data = {
         #プレイヤーID
-        "player_id": 7,
+        "player_id": '',
         #場に出ているカード
-        "field_card": 3,
+        "field_card": "",
         #誰のターンか
-        "turn": 1,
+        "turn": '',
         #ゲームが終了しているか
         "gameset":True,
         #誰が買ったか
-        "winer": 1,
+        "winer": '',
         #それぞれのプレイヤーの残り枚数
         "remaining_number_list":[],
         #自分の持っているカード
         "my_card_list":[]
     } 
 
-    return json.dump(server_data)
+    return json.dumps(server_data)
