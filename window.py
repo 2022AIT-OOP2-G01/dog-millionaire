@@ -20,9 +20,6 @@ class main(QWidget):
             background-color: white;  /* 背景色 */
         }"""
 
-        # サーバーからのデータ受け取り
-        self.dataa = json.loads(data.get_server_data())
-
         # 残り枚数の表示に使う変数
         self.labelcard1P = ''
         self.labelcard2P = ''
@@ -80,6 +77,9 @@ class main(QWidget):
 
 
     def reload_field(self):
+        
+        # サーバーからのデータ受け取り
+        self.dataa = json.loads(data.get_server_data())
 
         if (self.dataa["remaining_number_list"] != []):
 
