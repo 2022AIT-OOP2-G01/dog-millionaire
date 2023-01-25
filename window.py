@@ -2,6 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication,QWidget,QLabel,QPushButton
 from PySide6.QtGui import QPixmap
 import json
+import data
 
 class main(QWidget):
     def __init__(self):
@@ -357,32 +358,32 @@ class main(QWidget):
             btn[x].setStyleSheet("QPushButton {background-color: transparent}")
             btn[x].setGeometry(170 + x*35, 555, 50, 125)
             
-        # 押されたカードを出力
-        btn[0].clicked.connect(lambda: print(card[0])) 
+        # サーバーへのデータを渡す
+        btn[0].clicked.connect(lambda: data.get_client_data(card[0]))
         if len(card) > 2: 
-            btn[1].clicked.connect(lambda: print(card[1]))
+            btn[1].clicked.connect(lambda: data.get_client_data(card[1]))
         if len(card) > 3:
-            btn[2].clicked.connect(lambda: print(card[2]))
+            btn[2].clicked.connect(lambda: data.get_client_data(card[2]))
         if len(card) > 4:
-            btn[3].clicked.connect(lambda: print(card[3]))
+            btn[3].clicked.connect(lambda: data.get_client_data(card[3]))
         if len(card) > 4:
-            btn[4].clicked.connect(lambda: print(card[4]))
+            btn[4].clicked.connect(lambda: data.get_client_data(card[4]))
         if len(card) > 5:
-            btn[5].clicked.connect(lambda: print(card[5]))
+            btn[5].clicked.connect(lambda: data.get_client_data(card[5]))
         if len(card) > 6:
-            btn[6].clicked.connect(lambda: print(card[6]))
+            btn[6].clicked.connect(lambda: data.get_client_data(card[6]))
         if len(card) > 7:
-            btn[7].clicked.connect(lambda: print(card[7]))
+            btn[7].clicked.connect(lambda: data.get_client_data(card[7]))
         if len(card) > 8:
-            btn[8].clicked.connect(lambda: print(card[8]))
+            btn[8].clicked.connect(lambda: data.get_client_data(card[8]))
         if len(card) > 9:
-            btn[9].clicked.connect(lambda: print(card[9]))
+            btn[9].clicked.connect(lambda: data.get_client_data(card[9]))
         if len(card) > 10:
-            btn[10].clicked.connect(lambda: print(card[10]))
+            btn[10].clicked.connect(lambda: data.get_client_data(card[10]))
         if len(card) > 11:
-            btn[11].clicked.connect(lambda: print(card[11]))
+            btn[11].clicked.connect(lambda: data.get_client_data(card[11]))
         if len(card) > 12:
-            btn[12].clicked.connect(lambda: print(card[12]))
+            btn[12].clicked.connect(lambda: data.get_client_data(card[12]))
 
 qAp = QApplication(sys.argv)
 mado = main()

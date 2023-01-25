@@ -1,6 +1,6 @@
 import json
 
-def get_client_data():
+def get_client_data(cardnum):
 
    #自分が出したカード
     played_card = 5
