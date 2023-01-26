@@ -19,3 +19,11 @@ movie.start()
 
 window.show()
 sys.exit(app.exec_())
+
+
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QMovie
+
+movie = QMovie("animation.gif")
+movie.setScaledSize(QSize(width, height))
+

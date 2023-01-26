@@ -1,8 +1,10 @@
 import sys
 import os
-from PySide6.QtGui import QMovie, QIcon
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QFileDialog
-#from PySide6.QtWidgets import QFileDialog
+
+#from PySide6.QtCore import QSize
+from PySide6.QtGui import QMovie, QIcon, QPixmap
+from PySide6.QtWidgets import QApplication, QLabel, QWidget
+
 
 path = 'dog.gif'
 
@@ -12,38 +14,41 @@ class Window(QWidget):
         #タイトル、ウィンドウの位置大きさ調整
         self.setWindowTitle('ロード画面')
         self.setGeometry(300,100,850,700)
+        #幅・高さの最大値固定
         self.setFixedSize(900, 800)
-        self.setStyleSheet("QWidget{ background-color: green }")
-    
-    def addimage(self):
-
-        label = QLabel(self)
-        movie = QMovie(path)
-        """
-        #パスの確認
-        current_directory = os.getcwd()
-        image_path = os.path.join(current_directory, "パスの入力")
-
-        #選択して表示
-        options = QFileDialog.Options()
-        options |= QFileDialog.ReadOnly
-        file_name, _ = QFileDialog.getOpenFileName(None, "dog.gif", "", "Images (*.gif);;All Files (*)", options=options)
-        if file_name:
-            path = file_name
-        """
-        label.setMovie(movie)
-        ##読み込み確認
-        if label.setMovie(movie):
-            print("読み込まれてる")
-        else:
-            print("読み込まれてない")
         
+        css= '''
+        width: 30%;
+        height: auto;
+        '''
+        
+        movie = QMovie(path)
+        #movie.setScaledSize(QSize(500, 250))
+        self = QLabel(self)
+        self.setGeometry(380,500, 500, 250)
+        self.setMovie(movie)
+        self.setStyleSheet(css)
         movie.start()
+        
+    
+        label1 = QLabel('<font size=7 color=black >NOW LOADING・・・</font>', self)
+        label1.setGeometry(850,700,444,444)
+        
 
+        
+
+        
+       
+    #gif画像を追加する関数
+    def gif_addimage(self, path):
+        movie = QMovie(path)
+        self = QLabel(self)
+        self.setMovie(movie)
+        self.setGeometry(0, 0, 500, 400)
+        movie.start()
 
 app = QApplication(sys.argv)
 window = Window()
-window.addimage()
 window.show()
 sys.exit(app.exec_())
 
