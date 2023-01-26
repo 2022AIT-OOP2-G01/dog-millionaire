@@ -33,6 +33,10 @@ class main(QWidget):
 
         # 場に出ているカードの表示に使う変数
         self.label_Nowcard = ''
+
+        # 自分の手札の表示に使う変数の定義
+        self.label_my_card = []
+        self.btn = []
         
 
     def create_field(self):
@@ -132,7 +136,7 @@ class main(QWidget):
             for x in range(len(self.label_Backcard2P)):
                 self.label_Backcard2P[x].deleteLater()
 
-                self.label_Backcard2P.clear()
+            self.label_Backcard2P.clear()
 
             # 今のカードの表示
             for x in range(card2P):
@@ -148,7 +152,7 @@ class main(QWidget):
             for x in range(len(self.label_Backcard3P)):
                 self.label_Backcard3P[x].deleteLater()
 
-                self.label_Backcard3P.clear()
+            self.label_Backcard3P.clear()
 
             # 今のカードの表示
             for x in range(card3P):
@@ -164,7 +168,7 @@ class main(QWidget):
             for x in range(len(self.label_Backcard4P)):
                 self.label_Backcard4P[x].deleteLater()
 
-                self.label_Backcard4P.clear()
+            self.label_Backcard4P.clear()
 
             # 今のカードの表示
             for x in range(card4P):
@@ -195,6 +199,18 @@ class main(QWidget):
         # 自分の手札データの取得
         if (self.dataa["my_card_list"] != []):
             card = self.dataa["my_card_list"]
+
+            # 前の手札カードを削除
+            for x in range(len(self.label_my_card)):
+                self.label_my_card[x].deleteLater()
+
+            self.label_my_card.clear()
+
+            # 前の手札カードのボタンの削除
+            for x in range(len(self.btn)):
+                self.btn[x].deleteLater()
+
+            self.btn.clear()
 
             #カードと照合する
             for x in range(int(len(card))):
@@ -410,43 +426,45 @@ class main(QWidget):
                     pix = pix.scaledToWidth(90) # 大きさの変更
                 
                 # カードの表示
-                label = QLabel(self) # 画像を置くQLabel
-                label.move(170 + x*35, 550)
-                label.setPixmap(pix)
+                self.label_my_card.append(QLabel(self)) # 画像を置くQLabel
+                self.label_my_card[x].move(170 + x*35, 550)
+                self.label_my_card[x].setPixmap(pix)
+
 
             # ボタンの表示
-            btn = [0]*len(card)
+            self.btn = [0]*len(card)
             for x in range(int(len(card))):
-                btn[x]= QPushButton('',self)
-                btn[x].setStyleSheet("QPushButton {background-color: transparent}")
-                btn[x].setGeometry(170 + x*35, 555, 50, 125)
+                self.btn[x]= QPushButton('',self)
+                self.btn[x].setStyleSheet("QPushButton {background-color: transparent}")
+                self.btn[x].setGeometry(170 + x*35, 555, 50, 125)
                 
             # 押されたカードを出力
-            btn[0].clicked.connect(lambda: print(card[0])) 
-            if len(card) > 2: 
-                btn[1].clicked.connect(lambda: print(card[1]))
-            if len(card) > 3:
-                btn[2].clicked.connect(lambda: print(card[2]))
-            if len(card) > 4:
-                btn[3].clicked.connect(lambda: print(card[3]))
-            if len(card) > 4:
-                btn[4].clicked.connect(lambda: print(card[4]))
-            if len(card) > 5:
-                btn[5].clicked.connect(lambda: print(card[5]))
-            if len(card) > 6:
-                btn[6].clicked.connect(lambda: print(card[6]))
-            if len(card) > 7:
-                btn[7].clicked.connect(lambda: print(card[7]))
-            if len(card) > 8:
-                btn[8].clicked.connect(lambda: print(card[8]))
-            if len(card) > 9:
-                btn[9].clicked.connect(lambda: print(card[9]))
-            if len(card) > 10:
-                btn[10].clicked.connect(lambda: print(card[10]))
-            if len(card) > 11:
-                btn[11].clicked.connect(lambda: print(card[11]))
-            if len(card) > 12:
-                btn[12].clicked.connect(lambda: print(card[12]))
+            self.btn[0].clicked.connect(lambda: print(card[0])) 
+            if len(card) >= 2: 
+                self.btn[1].clicked.connect(lambda: print(card[1]))
+            if len(card) >= 3:
+                self.btn[2].clicked.connect(lambda: print(card[2]))
+            if len(card) >= 4:
+                self.btn[3].clicked.connect(lambda: print(card[3]))
+            if len(card) >= 5:
+                self.btn[4].clicked.connect(lambda: print(card[4]))
+            if len(card) >= 6:
+                self.btn[5].clicked.connect(lambda: print(card[5]))
+            if len(card) >= 7:
+                self.btn[6].clicked.connect(lambda: print(card[6]))
+            if len(card) >= 8:
+                self.btn[7].clicked.connect(lambda: print(card[7]))
+            if len(card) >= 9:
+                self.btn[8].clicked.connect(lambda: print(card[8]))
+            if len(card) >= 10:
+                self.btn[9].clicked.connect(lambda: print(card[9]))
+            if len(card) >= 11:
+                self.btn[10].clicked.connect(lambda: print(card[10]))
+            if len(card) >= 12:
+                self.btn[11].clicked.connect(lambda: print(card[11]))
+            if len(card) >= 13:
+                self.btn[12].clicked.connect(lambda: print(card[12]))
+                
 
 qAp = QApplication(sys.argv)
 mado = main()
