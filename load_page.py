@@ -1,8 +1,7 @@
 import sys
-import os
-
-#from PySide6.QtCore import QSize
-from PySide6.QtGui import QMovie, QIcon, QPixmap
+import json
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QMovie, QPixmap
 from PySide6.QtWidgets import QApplication, QLabel, QWidget
 
 
@@ -14,38 +13,34 @@ class Window(QWidget):
         #タイトル、ウィンドウの位置大きさ調整
         self.setWindowTitle('ロード画面')
         self.setGeometry(300,100,850,700)
-        #幅・高さの最大値固定
-        self.setFixedSize(900, 800)
+        self.setFixedSize(900, 800)#幅・高さの最大値固定
         
-        css= '''
-        width: 30%;
-        height: auto;
-        '''
+        #self.setStyleSheet("QWidget{ background-image: url(img/backimage.jpg) }")
         
+        pixmap = QPixmap("img/backimage")#画像の読み込み
+        label = QLabel(self)
+        label.move(-600, -400)#画像移動
+        label.setPixmap(pixmap)
+
+        #gif画像の貼り付け
         movie = QMovie(path)
-        #movie.setScaledSize(QSize(500, 250))
-        self = QLabel(self)
-        self.setGeometry(380,500, 500, 250)
-        self.setMovie(movie)
-        self.setStyleSheet(css)
+        movie.setScaledSize(QSize(300, 250))#画像の大きさを調整
+        label1 = QLabel(self)
+        label1.setGeometry(500,500, 500, 300)#画像の位置を調整
+        label1.setMovie(movie)
         movie.start()
-        
+
     
-        label1 = QLabel('<font size=7 color=black >NOW LOADING・・・</font>', self)
-        label1.setGeometry(850,700,444,444)
-        
-
-        
-
+        labelStyle = """QLabel {
+            color: white;
+            font-size: 20px;
+        }
+        """
+        #文字の表示
+        label2 = QLabel('<font size=7 color=white >NOW LOADING・・・</font>', self)
+        label2.move(100,230)
         
        
-    #gif画像を追加する関数
-    def gif_addimage(self, path):
-        movie = QMovie(path)
-        self = QLabel(self)
-        self.setMovie(movie)
-        self.setGeometry(0, 0, 500, 400)
-        movie.start()
 
 app = QApplication(sys.argv)
 window = Window()
