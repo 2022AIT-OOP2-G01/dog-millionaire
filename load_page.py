@@ -1,11 +1,12 @@
 import sys
 import json
+import data
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QMovie, QPixmap
 from PySide6.QtWidgets import QApplication, QLabel, QWidget
 
 
-path = 'dog.gif'
+
 
 class Window(QWidget):
     def __init__(self) :
@@ -23,7 +24,7 @@ class Window(QWidget):
         label.setPixmap(pixmap)
 
         #gif画像の貼り付け
-        movie = QMovie(path)
+        movie = QMovie('img/dog.gif')
         movie.setScaledSize(QSize(300, 250))#画像の大きさを調整
         label1 = QLabel(self)
         label1.setGeometry(500,500, 500, 300)#画像の位置を調整
@@ -39,8 +40,18 @@ class Window(QWidget):
         #文字の表示
         label2 = QLabel('<font size=7 color=white >NOW LOADING・・・</font>', self)
         label2.move(100,230)
-        
-       
+
+    ''' 
+    通信は
+    def connect(self):
+        self.data = json.loads(data.get_server_data)
+        if ():
+            
+    '''
+
+
+
+
 
 app = QApplication(sys.argv)
 window = Window()
