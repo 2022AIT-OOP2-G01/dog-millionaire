@@ -150,6 +150,7 @@ class main(QWidget):
             btn.setStyleSheet("QPushButton {background-color: transparent}")
             btn.setGeometry(170 + x*35, 555, 100, 150)
         
+        #for文に組み込むとなぜか関数の引数が全て12になってしまう
         self.findChild(QPushButton, "btn1").clicked.connect(lambda: self.btn_event(0))
         self.findChild(QPushButton, "btn2").clicked.connect(lambda: self.btn_event(1))
         self.findChild(QPushButton, "btn3").clicked.connect(lambda: self.btn_event(2))
@@ -169,6 +170,12 @@ class main(QWidget):
         yourID.setObjectName("yourid")
         yourID.setStyleSheet("font-size: 20pt;")
         yourID.move(390,700)
+
+        #Passボタン
+        pass_btn = QPushButton("Pass!!", self)
+        pass_btn.setStyleSheet("font-size: 30pt; background-color: white; color: black;")
+        pass_btn.setGeometry(600, 700, 100, 30)
+        pass_btn.clicked.connect(lambda: self.btn_event(-1))
     
     def enemy_reload_data(self, n1, n2, n3, n4, top):
         player = [1, 2, 3, 4]

@@ -188,7 +188,6 @@ def main():
                 else:
                     if int(put_card[1:]) == 8:
                         turn-=1
-                    
                     if int(put_card[1:]) == 11:
                         revolution = True
                     
