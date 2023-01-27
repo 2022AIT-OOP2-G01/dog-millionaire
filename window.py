@@ -1,7 +1,7 @@
 import sys
 from PySide6.QtWidgets import QApplication,QWidget,QLabel,QPushButton
-from PySide6.QtGui import QPixmap
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtGui import QPixmap, QMovie
+from PySide6.QtCore import Signal, Slot, QSize
 import json
 import socket
 import threading
@@ -31,6 +31,7 @@ class main(QWidget):
         self.numberofcards = [13, 13, 13, 13]
         self.myid = 10
         self.turn = 11
+        self.first_trigger = True
         
         self.setWindowTitle('大富豪') # ウィンドウのタイトル
         self.setGeometry(300,100,850,700) # ウィンドウの位置と大きさ
@@ -176,16 +177,26 @@ class main(QWidget):
         pass_btn.setStyleSheet("font-size: 30pt; background-color: white; color: black;")
         pass_btn.setGeometry(600, 700, 100, 30)
         pass_btn.clicked.connect(lambda: self.btn_event(-1))
+
+        #ロードGIF
+        movie = QMovie('img/dog.gif')
+        movie.setScaledSize(QSize(900, 800))#画像の大きさを調整
+        label1 = QLabel(self)
+        label1.setGeometry(0,0,900,800)#画像の位置を調整
+        label1.setMovie(movie)
+        label1.setObjectName("gif")
+        movie.start()
     
-    def enemy_reload_data(self, n1, n2, n3, n4, top, winner):
+    def enemy_reload_data(self, n1, n2, n3, n4, top, winer):
         player = [1, 2, 3, 4]
         player.remove(self.myid+1)
         num = [n1, n2, n3, n4]
+
         # 残り枚数の更新
         for i in range(4):
             target =  self.findChild(QLabel, "number{}P".format(str(i+1)))
             if num[i] == 0:
-                target.setText(str(winner.index(i+1)+1)+"着")
+                target.setText(str(winer.index(i)+1)+"着")
             else:
                 target.setText("残り"+str(num[i])+"枚")
 
@@ -210,6 +221,10 @@ class main(QWidget):
                 self.numberofcards[p-1] -= 1
 
     def reload_mycard(self, cards):
+        if self.first_trigger == True:
+            self.findChild(QLabel, "gif").deleteLater()
+            self.first_trigger = False
+        
         self.findChild(QLabel, "yourid").setText("You are Player"+str(self.myid+1))
         if len(cards) < self.numberofcards[self.myid]:
             self.findChild(QLabel, "my_cards"+str(self.numberofcards[self.myid])).deleteLater()
@@ -224,10 +239,11 @@ class main(QWidget):
     def reload_field(self, server_data):
         data  = json.loads(server_data)
 
-        # プレイヤーのIDとTOPカード,ターンの受け取り
+        # プレイヤーのIDとTOPカード,ターン,勝者の受け取り
         self.myid = data["player_id"]
         top_card = data["field_card"]
         self.turn = data["turn"]
+        winer = data["winer"]
 
         # 残り枚数の受け取り
         card1P = data["remaining_number_list"][0]
@@ -236,7 +252,7 @@ class main(QWidget):
         card4P = data["remaining_number_list"][3]
         
         # 残り枚数とステータスの表示
-        self.enemy_reload_data(card1P, card2P, card3P, card4P, top_card)
+        self.enemy_reload_data(card1P, card2P, card3P, card4P, top_card, winer)
 
         # 自分のカードの受け取り
         mycards = data["my_card_list"]

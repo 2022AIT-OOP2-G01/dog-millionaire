@@ -3,8 +3,8 @@ import socket
 import random
 import json
 
-PORT = 50000
-IP = "180.60.151.137"
+PORT = 25565
+IP = "localhost"
 BUFFER_SIZE = 1024
 #AF_INET=アドレスファミリーを示す関数　SOCK_STREAM=ソケットタイプを示す関数
 
@@ -153,7 +153,6 @@ def main():
         pass
     print("GameStart")
 
-    #この先未テスト
 
     while True:
         now = order[turn%player]
@@ -179,7 +178,7 @@ def main():
                 print("Player{} Pass!!".format(now))
             else:
                 put_card = player_list[now].getCardList()[put_card_index]
-
+                print("Turn{}: Player{} put {}".format(turn, now, put_card))
                 if player_list[now].getNumberOfCards() == 1:
                     #終了処理
                     rank.append(now)
@@ -190,9 +189,10 @@ def main():
                         turn-=1
                     if int(put_card[1:]) == 11:
                         revolution = True
+                    if int(put_card[1:]) == 5:
+                        turn+=1
                     
                     top_card[1] = now
-                    print("Turn{}: Player{} put {}".format(turn, now, put_card))
                 
                 top_card[0] = put_card
                 player_list[now].deleteCard(put_card_index)
