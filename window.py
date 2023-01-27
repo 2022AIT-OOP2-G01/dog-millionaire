@@ -564,6 +564,10 @@ def start_client(gui):
             turn = int(json_obj['turn'])
             field_card = json_obj['field_card']
             revolution = json_obj['revolution']
+            winer = json_obj["winer"]
+
+            if len(winer) == 3:
+                break
             
             #player_idとturnが一緒なら自分の手札を表示
             if player_id == turn:

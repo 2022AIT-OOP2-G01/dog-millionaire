@@ -113,7 +113,10 @@ def recv_client(sock, addr, id):
     send_content[id][0] = 0
 
     while True:
-        if send_content[id][0] == 1:
+        if send_content[id][0] == 10:
+            sock.send(get_server_data(id).encode())
+            break
+        elif send_content[id][0] == 1:
             sock.send(get_server_data(id).encode())
             send_content[id][0] = 0
             if order[turn%player] == id:
@@ -197,6 +200,9 @@ def main():
                 top_card[0] = put_card
                 player_list[now].deleteCard(put_card_index)
         turn+=1
+    for i in range(4):
+        send_content[i][0] = 10
+    print("GameFinish!!")
 
     # while True:
     #     now = order[turn%player]
