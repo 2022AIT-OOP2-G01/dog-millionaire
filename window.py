@@ -7,8 +7,8 @@ import socket
 import threading
 
 BUFFER_SIZE = 1024
-IP = "localhost"
-PORT = 50000
+IP = "192.168.10.103"
+PORT = 25565
 
 put_card = -2
 
@@ -177,15 +177,17 @@ class main(QWidget):
         pass_btn.setGeometry(600, 700, 100, 30)
         pass_btn.clicked.connect(lambda: self.btn_event(-1))
     
-    def enemy_reload_data(self, n1, n2, n3, n4, top):
+    def enemy_reload_data(self, n1, n2, n3, n4, top, winner):
         player = [1, 2, 3, 4]
         player.remove(self.myid+1)
         num = [n1, n2, n3, n4]
         # 残り枚数の更新
-        self.findChild(QLabel, "number1P").setText("残り"+str(n1)+"枚")
-        self.findChild(QLabel, "number2P").setText("残り"+str(n2)+"枚")
-        self.findChild(QLabel, "number3P").setText("残り"+str(n3)+"枚")
-        self.findChild(QLabel, "number4P").setText("残り"+str(n4)+"枚")
+        for i in range(4):
+            target =  self.findChild(QLabel, "number{}P".format(str(i+1)))
+            if num[i] == 0:
+                target.setText(str(winner.index(i+1)+1)+"着")
+            else:
+                target.setText("残り"+str(num[i])+"枚")
 
         # ターンの表示
         for i in range(4):
@@ -549,14 +551,10 @@ def start_client(gui):
             
             #player_idとturnが一緒なら自分の手札を表示
             if player_id == turn:
-                print(my_card_list)
-                #場のカードを表示
-                print('場のカード',field_card)
                 #自分が出すカードをインデックスで指定
                 while True:
                     if put_card != -2:
                         if int(put_card) == -1 or check_strength(field_card, my_card_list[int(put_card)], revolution):
-                            print("Send", str(put_card))
                             break
                         print("このカードは出せません")
                         put_card = -2
