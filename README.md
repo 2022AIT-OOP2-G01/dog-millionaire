@@ -1,5 +1,5 @@
-# final
-最終課題
+# dog-millionaire
+犬富豪
 - 進捗情報(Trello)：https://trello.com/b/bOc3UeUV/%E5%A4%A7%E5%AF%8C%E8%B1%AA
 ## 役割
 ### クライアント側
@@ -20,6 +20,7 @@
 - 出せるカードの判定(送信前・後ともに)
 
 ## 使用するライブラリ
+- Python=3.10.6
 - Pyside6
 
 ## 実行方法
