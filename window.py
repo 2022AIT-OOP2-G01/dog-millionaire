@@ -10,6 +10,8 @@ BUFFER_SIZE = 1024
 IP = "localhost"
 PORT = 50000
 
+put_card = -2
+
 
 def check_strength(top, put, revolution):
     st = [12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0]
@@ -27,6 +29,8 @@ class main(QWidget):
 
         self.realod_signal.connect(self.reload_field)
         self.numberofcards = [13, 13, 13, 13]
+        self.myid = 10
+        self.turn = 11
         
         self.setWindowTitle('大富豪') # ウィンドウのタイトル
         self.setGeometry(300,100,850,700) # ウィンドウの位置と大きさ
@@ -43,6 +47,11 @@ class main(QWidget):
         # 自分の手札の表示に使う変数の定義
         self.label_my_card = []
         self.btn = []
+
+    def btn_event(self, num):
+        global put_card
+        if self.myid == self.turn:
+            put_card = num
 
     def create_field(self):
         # ラベルのstyle設定
@@ -64,7 +73,8 @@ class main(QWidget):
         labelT.move(0,0)
 
         # 1P
-        labelP1 = QLabel("Player1", self)
+        labelP1 = QLabel("Player1  ", self)
+        labelP1.setObjectName("P1")
         labelP1.setStyleSheet(self.labelStyleP)
         labelP1.move(400,0)
         number1 = QLabel("残り 0枚", self)
@@ -73,7 +83,8 @@ class main(QWidget):
         number1.move(400,30)
 
         # 2P
-        labelP2 = QLabel("Player2", self)
+        labelP2 = QLabel("Player2  ", self)
+        labelP2.setObjectName("P2")
         labelP2.setStyleSheet(self.labelStyleP)
         labelP2.move(500,0)
         number2 = QLabel("残り 0枚", self)
@@ -82,7 +93,8 @@ class main(QWidget):
         number2.move(500,30)
 
         # 3P
-        labelP3 = QLabel("Player3", self)
+        labelP3 = QLabel("Player3  ", self)
+        labelP3.setObjectName("P3")
         labelP3.setStyleSheet(self.labelStyleP)
         labelP3.move(600,0)
         number3 = QLabel("残り 0枚", self)
@@ -91,7 +103,8 @@ class main(QWidget):
         number3.move(600,30)
 
         # 4P
-        labelP4 = QLabel("Player4", self)
+        labelP4 = QLabel("Player4  ", self)
+        labelP4.setObjectName("P4")
         labelP4.setStyleSheet(self.labelStyleP)
         labelP4.move(700,0)
         number4 = QLabel("残り 0枚", self)
@@ -121,19 +134,58 @@ class main(QWidget):
                 
                 card_label.setPixmap(back_cards[i])
                 card_label.setObjectName("enemy{}_cards{}".format(str(i+1), str(x+1)))
+        
+        #自分のカード
+        for x in range(13):
+            mycard_label = QLabel(self)
+            mycard_label.move(750, 100 + x*30)
+            mycard_label.setPixmap(QPixmap('./card_img/card_back.png').scaledToWidth(100))
+            mycard_label.setObjectName("my_cards"+str(x+1))
+            mycard_label.move(170 + x*35, 550)
+        
+        #ボタンの表示
+        for x in range(13):
+            btn = QPushButton(self)
+            btn.setObjectName("btn"+str(x+1))
+            btn.setStyleSheet("QPushButton {background-color: transparent}")
+            btn.setGeometry(170 + x*35, 555, 100, 150)
+        
+        self.findChild(QPushButton, "btn1").clicked.connect(lambda: self.btn_event(0))
+        self.findChild(QPushButton, "btn2").clicked.connect(lambda: self.btn_event(1))
+        self.findChild(QPushButton, "btn3").clicked.connect(lambda: self.btn_event(2))
+        self.findChild(QPushButton, "btn4").clicked.connect(lambda: self.btn_event(3))
+        self.findChild(QPushButton, "btn5").clicked.connect(lambda: self.btn_event(4))
+        self.findChild(QPushButton, "btn6").clicked.connect(lambda: self.btn_event(5))
+        self.findChild(QPushButton, "btn7").clicked.connect(lambda: self.btn_event(6))
+        self.findChild(QPushButton, "btn8").clicked.connect(lambda: self.btn_event(7))
+        self.findChild(QPushButton, "btn9").clicked.connect(lambda: self.btn_event(8))
+        self.findChild(QPushButton, "btn10").clicked.connect(lambda: self.btn_event(9))
+        self.findChild(QPushButton, "btn11").clicked.connect(lambda: self.btn_event(10))
+        self.findChild(QPushButton, "btn12").clicked.connect(lambda: self.btn_event(11))
+        self.findChild(QPushButton, "btn13").clicked.connect(lambda: self.btn_event(12))
+        
+        #自分のID
+        yourID = QLabel("You are Player_", self)
+        yourID.setObjectName("yourid")
+        yourID.setStyleSheet("font-size: 20pt;")
+        yourID.move(390,700)
     
-    def enemy_reload_data(self, id, n1, n2, n3, n4, top):
+    def enemy_reload_data(self, n1, n2, n3, n4, top):
         player = [1, 2, 3, 4]
-        player.remove(id+1)
+        player.remove(self.myid+1)
         num = [n1, n2, n3, n4]
-
-        #残り枚数の更新
+        # 残り枚数の更新
         self.findChild(QLabel, "number1P").setText("残り"+str(n1)+"枚")
         self.findChild(QLabel, "number2P").setText("残り"+str(n2)+"枚")
         self.findChild(QLabel, "number3P").setText("残り"+str(n3)+"枚")
         self.findChild(QLabel, "number4P").setText("残り"+str(n4)+"枚")
 
-        #場に出ているカードの更新
+        # ターンの表示
+        for i in range(4):
+            self.findChild(QLabel, "P"+str(i+1)).setText('Player{}  '.format(str(i+1)))
+        self.findChild(QLabel, "P"+str(self.turn+1)).setText('Player{}◀︎'.format(str(self.turn+1)))
+
+        # 場に出ているカードの更新
         if top == "T14":
             pix = QPixmap("./card_img/card_back.png")
         else:
@@ -148,24 +200,40 @@ class main(QWidget):
                 self.findChild(QLabel, "enemy{}_cards{}".format(str(i+1), str(self.numberofcards[p-1]))).deleteLater()
                 self.numberofcards[p-1] -= 1
 
+    def reload_mycard(self, cards):
+        self.findChild(QLabel, "yourid").setText("You are Player"+str(self.myid+1))
+        if len(cards) < self.numberofcards[self.myid]:
+            self.findChild(QLabel, "my_cards"+str(self.numberofcards[self.myid])).deleteLater()
+            self.findChild(QPushButton, "btn"+str(self.numberofcards[self.myid])).deleteLater()
+            self.numberofcards[self.myid] -= 1
+        for i in range(len(cards)):
+            pix = QPixmap("./card_img/" + cards[i]).scaledToWidth(100)
+            self.findChild(QLabel, "my_cards"+str(i+1)).setPixmap(pix)
 
 
     @Slot(str)
     def reload_field(self, server_data):
         data  = json.loads(server_data)
-        myid = data["player_id"]
+
+        # プレイヤーのIDとTOPカード,ターンの受け取り
+        self.myid = data["player_id"]
         top_card = data["field_card"]
-        if (data["remaining_number_list"] != []):
+        self.turn = data["turn"]
 
-            # 残り枚数の受け取り
-            card1P = data["remaining_number_list"][0]
-            card2P = data["remaining_number_list"][1]
-            card3P = data["remaining_number_list"][2]
-            card4P = data["remaining_number_list"][3]
-            
-            # 残り枚数表示
-            self.enemy_reload_data(myid, card1P, card2P, card3P, card4P, top_card)
+        # 残り枚数の受け取り
+        card1P = data["remaining_number_list"][0]
+        card2P = data["remaining_number_list"][1]
+        card3P = data["remaining_number_list"][2]
+        card4P = data["remaining_number_list"][3]
+        
+        # 残り枚数とステータスの表示
+        self.enemy_reload_data(card1P, card2P, card3P, card4P, top_card)
 
+        # 自分のカードの受け取り
+        mycards = data["my_card_list"]
+
+        # 自分のカードの表示
+        self.reload_mycard(mycards)
 
         """
         if (data["field_card"] != ''):
@@ -455,6 +523,7 @@ class main(QWidget):
                 self.btn[12].clicked.connect(lambda: print(card[12]))
         """
 def start_client(gui):
+    global put_card
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((IP, PORT))
         server_data = s.recv(BUFFER_SIZE).decode()
@@ -478,12 +547,15 @@ def start_client(gui):
                 print('場のカード',field_card)
                 #自分が出すカードをインデックスで指定
                 while True:
-                    client_data = input('あなたの番です。何を出しますか？ > ')
-                    if int(client_data) == -1 or check_strength(field_card, my_card_list[int(client_data)], revolution):
-                        break
-                    print('このカードは出せません')
+                    if put_card != -2:
+                        if int(put_card) == -1 or check_strength(field_card, my_card_list[int(put_card)], revolution):
+                            print("Send", str(put_card))
+                            break
+                        print("このカードは出せません")
+                        put_card = -2
                 #サーバーに自分の出したカードのデータをエンコードして送信
-                s.send(client_data.encode())
+                s.send(str(put_card).encode())
+                put_card = -2
 
 if __name__ == "__main__":
     qAp = QApplication(sys.argv)
