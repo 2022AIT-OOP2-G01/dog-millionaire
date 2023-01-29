@@ -1,7 +1,10 @@
 import sys
+import json
+import data
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QMovie, QPixmap
 from PySide6.QtWidgets import QApplication, QLabel, QWidget
+
 
 
 
@@ -13,9 +16,8 @@ class Window(QWidget):
         self.setGeometry(300,100,850,700)
         self.setFixedSize(900, 800)#幅・高さの最大値固定
         
-        #self.setStyleSheet("QWidget{ background-image: url(img/backimage.jpg) }"
+        #self.setStyleSheet("QWidget{ background-image: url(img/backimage.jpg) }")
         
-        #背景
         pixmap = QPixmap("img/backimage")#画像の読み込み
         label = QLabel(self)
         label.move(-600, -400)#画像移動
@@ -30,9 +32,23 @@ class Window(QWidget):
         movie.start()
 
     
+        labelStyle = """QLabel {
+            color: white;
+            font-size: 20px;
+        }
+        """
         #文字の表示
         label2 = QLabel('<font size=7 color=white >NOW LOADING・・・</font>', self)
         label2.move(100,230)
+
+    ''' 
+    通信は
+    def connect(self):
+        self.data = json.loads(data.get_server_data)
+        if ():
+            
+    '''
+
 
 
 
