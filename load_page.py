@@ -1,6 +1,4 @@
 import sys
-import json
-import data
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QMovie, QPixmap
 from PySide6.QtWidgets import QApplication, QLabel, QWidget
@@ -32,24 +30,11 @@ class Window(QWidget):
         movie.start()
 
     
-        labelStyle = """QLabel {
-            color: white;
-            font-size: 20px;
-        }
-        """
         #文字の表示
         label2 = QLabel('<font size=7 color=white >NOW LOADING・・・</font>', self)
         label2.move(100,230)
 
-    ''' 
-    通信は
-    def connect(self):
-        self.data = json.loads(data.get_server_data)
-        if ():
-            
-    '''
-
-
+    
 
 
 
