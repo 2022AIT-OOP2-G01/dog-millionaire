@@ -33,7 +33,7 @@ class main(QWidget):
         self.turn = 11
         self.first_trigger = True
         
-        self.setWindowTitle('大富豪') # ウィンドウのタイトル
+        self.setWindowTitle('犬富豪') # ウィンドウのタイトル
         self.setGeometry(300,100,850,700) # ウィンドウの位置と大きさ
         self.setFixedSize(900,800)
         self.setStyleSheet("QWidget{ background-color: green }")
@@ -69,7 +69,7 @@ class main(QWidget):
         labelTbg.move(0,0)
 
         # タイトル
-        labelT = QLabel("大富豪",self)
+        labelT = QLabel("犬富豪",self)
         labelT.setStyleSheet(labelStyle)
         labelT.move(0,0)
 
@@ -197,6 +197,7 @@ class main(QWidget):
             target =  self.findChild(QLabel, "number{}P".format(str(i+1)))
             if num[i] == 0:
                 target.setText(str(winer.index(i)+1)+"着")
+                target.setStyleSheet("color: red; background-color: white; font-size: 20pt;")
             else:
                 target.setText("残り"+str(num[i])+"枚")
 

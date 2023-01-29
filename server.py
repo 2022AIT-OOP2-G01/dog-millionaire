@@ -4,7 +4,7 @@ import random
 import json
 
 PORT = 25565
-IP = "localhost"
+IP = "192.168.10.103"
 BUFFER_SIZE = 1024
 #AF_INET=アドレスファミリーを示す関数　SOCK_STREAM=ソケットタイプを示す関数
 
@@ -178,15 +178,15 @@ def main():
             put_card_index = int(send_content[now][1])
 
             if put_card_index == -1:
-                print("Player{} Pass!!".format(now))
+                print("Turn{}: Player{} Pass!!".format(turn, now+1))
             else:
                 put_card = player_list[now].getCardList()[put_card_index]
-                print("Turn{}: Player{} put {}".format(turn, now, put_card))
+                print("Turn{}: Player{} put {}".format(turn, now+1, put_card))
                 if player_list[now].getNumberOfCards() == 1:
                     #終了処理
                     rank.append(now)
                     top_card[1] = order[(turn-1)%player]
-                    print("Turn{}: Player{} Finish!!!".format(turn, now))
+                    print("Turn{}: Player{} Finish!!!".format(turn, now+1))
                 else:
                     if int(put_card[1:]) == 8:
                         turn-=1
@@ -200,6 +200,9 @@ def main():
                 top_card[0] = put_card
                 player_list[now].deleteCard(put_card_index)
         turn+=1
+    t = list(set(order) ^ set(rank))
+    rank.append(t[0])
+    player_list[t[0]].setCard([])
     for i in range(4):
         send_content[i][0] = 10
     print("GameFinish!!")
