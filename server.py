@@ -4,7 +4,7 @@ import random
 import json
 
 PORT = 25565
-IP = "192.168.10.103"
+IP = "localhost"
 BUFFER_SIZE = 1024
 #AF_INET=アドレスファミリーを示す関数　SOCK_STREAM=ソケットタイプを示す関数
 

@@ -7,7 +7,7 @@ import socket
 import threading
 
 BUFFER_SIZE = 1024
-IP = "192.168.10.103"
+IP = "localhost"
 PORT = 25565
 
 put_card = -2
