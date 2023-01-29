@@ -27,7 +27,6 @@
 <pre>
 $ git clone https://github.com/2022AIT-OOP2-G01/dog-millionaire.git
 $ cd dog-millionaire
-$ cd kadai11
 $ python server.py
 $ python window.py
 </pre>
