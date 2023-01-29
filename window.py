@@ -179,7 +179,7 @@ class main(QWidget):
         pass_btn.clicked.connect(lambda: self.btn_event(-1))
 
         #ロードGIF
-        movie = QMovie('img/dog.gif')
+        movie = QMovie('img/dog0.gif')
         movie.setScaledSize(QSize(900, 800))#画像の大きさを調整
         label1 = QLabel(self)
         label1.setGeometry(0,0,900,800)#画像の位置を調整
